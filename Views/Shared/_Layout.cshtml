@@ -1,0 +1,306 @@
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"].ToString();
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - BoiGhor</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.5/css/dataTables.bootstrap5.css" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.5/js/dataTables.bootstrap5.js"></script>
+    @RenderSection("scripts", required: false)
+
+<style>
+        @@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        body {
+            font-family: "Poppins", sans-serif;
+            overflow: hidden;
+            background: hsl(200deg, 27%, 98%);
+        }
+        .card-item {
+           box-shadow: -2px 3px 13px 0px rgb(207 200 200 / 55%);
+
+        }
+        .card-body::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .card-body::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-body::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline: 1px solid slategrey;
+        }
+
+        .header {
+
+            width: 100%;
+            height: 50px;
+            background: #010413;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 99;
+        }
+
+        .leftSideBar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            /*overflow-y: scroll;*/
+            background: #010413;
+            color: #fff;
+        }
+
+        .main-wraper {
+            margin-top: 50px;
+            margin-left: 250px;
+        }
+
+        .logo a {
+            display: inline-block;
+            font-size: 25px;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+            padding-left: 10px;
+        }
+
+       .logo a span {
+           color: #ffab0a;
+       }
+       nav.navbarCustom ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        nav.navbarCustom ul li {
+          margin: 10px 20px;
+        }
+        nav.navbarCustom ul li a {
+          display: block;
+          padding: 10px 15px;
+          text-decoration: none;
+          font-size: 17px;
+          color: #fff;
+          background: transparent;
+          border-radius: 5px;
+          transition: all 0.1s;
+        }
+        nav.navbarCustom ul li a i {
+          margin-right: 10px;
+        }
+        nav.navbarCustom ul li a.active,
+        nav.navbarCustom ul li a:hover {
+          font-weight: 700;
+          background: linear-gradient(
+            90deg,
+            rgba(244, 112, 4, 1) 50%,
+            rgba(193, 147, 48, 1) 100%
+          );
+        }
+
+        .wraper {
+            padding: 1rem;
+        }
+
+
+        .tableDataCenter th,
+        .tableDataCenter td {
+            padding: 5px 0 !important;
+            text-align: center !important; /* Horizontally center text */
+            vertical-align: middle !important; /* Vertically center text */
+        }
+
+        .tableDataCenter tbody tr {
+            border-top: 1px solid #0000002b;
+        }
+
+        .dt-search {
+            display: none;
+        }
+
+        .overflow-x {
+            overflow-x: auto;
+        }
+
+        ul li.action-btn:last-child a {
+            color: red;
+            margin-left: 5px;
+        }
+
+        .sub-menu li a {
+            padding-left: 30px !important;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            border: 1px solid rgba(145, 158, 171, 0.32);
+            height: 40px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 500;
+            background: #fff;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            outline: none !important;
+        }
+/*        .form-group select{
+            padding: 6px 5px;
+            background: #fff;
+        }*/
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus{
+            border: 1px solid #ffab0a;
+            outline: none !important;
+            box-shadow: none;
+        }
+
+        .form-group label {
+            color: #555;
+            display: inline-block;
+            margin-bottom: 7px;
+        }
+
+        .form-group textarea {
+            border: 1px solid rgba(145, 158, 171, 0.32);
+            height: 100px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 400;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            outline: none;
+        }
+</style>
+    <script>
+        function DataTableDefiner(id) {
+            var table = $(`#${id}`).DataTable({
+                lengthChange: false,    // Disable the "entries per page" dropdown
+                pagingType: "simple",   // Use simple pagination (Previous/Next buttons only)
+                ordering: false,        // Disable sorting on all columns
+                language: {
+                    paginate: {
+                        previous: '<i class="bi bi-chevron-left"></i>',  // Custom text for the "Previous" button
+                        next: '<i class="bi bi-chevron-right"></i>'       // Custom text for the "Next" button
+                    }
+                }
+            });
+            // Custom search functionality
+            $('#dt-search-filter').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        }
+        function DataTableWithPagging(id) {
+            $(`#${id}`).DataTable({
+                ordering: false,
+                lengthMenu: [5, 10, 15, 50, 100],
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="all-content">
+        <!--Header Start-->
+        <header class="header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <a href="#">Boi<span>Ghor</span></a>
+                        </div>
+
+                    </div>
+                    <div class="col-md-10">
+                        <div class="header-icon"><h4 class="text-start px-2">Dashboard</h4></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!--Header End-->
+        <!--LeftSiebar Start-->
+        <aside class="leftSideBar" id="leftSideBar">
+            <nav class="navbarCustom" id="sidebarMenu">
+                <ul>
+                    <li><a class="@(currentController == "Dashboard" && currentAction == "Index" ? "active": "")" href="@Url.Action("Index", "Dashboard")"><i class="bi bi-house"></i>Dashboard</a></li>
+                    <li>
+                        <a class="@(currentController == "Book" && currentAction == "Index" ? "active": "")" href="@Url.Action("Index", "Book")"><i class="bi bi-boxes"></i>Book List</a>
+                    </li>
+                    <li>
+                        <a class="@(currentController == "Book" && currentAction == "Create" ? "active": "")" href="@Url.Action("Create", "Book")"><i class="bi bi-pencil-square"></i>Add Book</a>
+                    </li>
+                    <li><a class="@(currentController == "Genre" ? "active": "")" href="@Url.Action("Index", "Genre")"><i class="bi bi-bookmark"></i>Genre</a></li>
+                    <li><a class="@(currentController == "Writer" ? "active": "")" href="@Url.Action("Index", "Writer")"><i class="bi bi-pencil-square"></i>Writer</a></li>
+                    <li><a class="@(currentController == "Publication" ? "active": "")" href="@Url.Action("Index", "Publication")" ><i class="bi bi-boxes"></i>Publication</a></li>
+                    <li><a class="@(currentController == "Customers" ? "active": "")" href="@Url.Action("Index", "Customers")"><i class="bi bi-people"></i>Customers</a></li>
+                    <li><a class="@(currentController == "Sales" && currentAction != "Create" ? "active": "")" href="@Url.Action("Index", "Sales")"><i class="bi bi-graph-up-arrow"></i>All Sales</a></li>
+                    <li><a class="@(currentController == "Sales" && currentAction == "Create" ? "active": "")" href="@Url.Action("Create", "Sales")"><i class="bi bi-pencil-square"></i>Add Sale</a></li>
+
+                </ul>
+            </nav>
+
+        </aside>
+        <!--LeftSiebar End-->
+        <!--Main Section Start-->
+        <main class="main-wraper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </main>
+        <!--Main Section End-->
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#sidebarMenu ul li").click(function () {
+                $("#sidebarMenu ul li").removeClass("active");
+                $(this).addClass("active");
+            });           
+
+        });
+        function totalPriceUpdater(totalPriceId) {
+            var ClassNodes = document.querySelectorAll(".subTotal");
+            var totalPriceId = document.getElementById(totalPriceId);
+            var totalPrice = 0;
+            ClassNodes.forEach(function (node) {
+                totalPrice += +node.textContent.trim();
+            })
+
+            totalPriceId.textContent = totalPrice;
+            
+        }
+
+        function priceUpdater(id, price, totalPriceId) {
+            var bookId = "book_" + id;
+            var priceId = "price_" + id;
+            var quantity = document.getElementById(bookId).value;
+            var updPrice = document.getElementById(priceId).textContent = price * quantity;
+
+            totalPriceUpdater(totalPriceId);
+        }
+    </script>
+</body>
+</html>

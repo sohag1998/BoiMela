@@ -1,0 +1,59 @@
+﻿@using BoiMela.Models
+@using BoiMela.DataAccess
+@{
+    ViewBag.Title = "Index";
+}
+@{ 
+    List<Writer> writers = WriterDataAccess.GetWriterList();
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>All Writers</h4>
+                    <p>All the listed writers are here!</p>
+                </div>
+                <a class="btn btn-success" href="@Url.Action("Create", "Writer")">Create Writer</a>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="sale-area">
+                        <div class="dt-table-body">
+                            <table id="WriterDtTable" class="display tableDataCenter" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (Writer writer in writers)
+                                        {
+                                            <tr>
+                                                <td>@writer.Name</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-warning" href="@Url.Action("Edit", "Writer", new {id=writer.Id})">Edit</a>
+                                                    <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Writer", new {id=writer.Id})">Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                
+                              
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    DataTableDefiner("WriterDtTable");
+</script>
+

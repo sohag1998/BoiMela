@@ -1,0 +1,92 @@
+﻿@using BoiMela.Models
+@using BoiMela.DataAccess
+@{
+    ViewBag.Title = "Create";
+}
+@{
+    List<Genre> genres = GenreDataAccess.GetGenreList();
+    List<Writer> writers = WriterDataAccess.GetWriterList();
+    List<Publication> publications = PublicationDataAccess.GetPublicationList();
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <h4 class="m-0">Book Add</h4>
+            <p>Create new book</p>
+            @using (Html.BeginForm("Create", "Book", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="BookTitle">Book Name</label>
+                        <input type="text" class="form-control" id="BookTitle" name="title">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookGenre">Genre</label>
+                        <br />
+                        <select name="genre" style="width: 100%">
+                            <option>Select Genre</option>
+                            @{
+                                foreach (Genre genre in genres)
+                                {
+                                    <option value="@genre.Name">@genre.Name</option>
+                                }
+                            }
+                        </select>
+                        @*<input type="text" class="form-control" id="BookGenre" name="genre">*@
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookWriter">Writer</label>
+                        <br />
+                        <select name="writer" style="width: 100%">
+                            <option>Select Writer</option>
+                            @{
+                                foreach (Writer writer in writers)
+                                {
+                                    <option value="@writer.Name">@writer.Name</option>
+                                }
+                            }
+                        </select>
+                        @*<input type="text" class="form-control" id="BookWriter" name="writer">*@
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookPublication">Publication</label>
+                        <br />
+                        <select name="publication" style="width: 100%">
+                            <option>Select Publication</option>
+                            @{
+                                foreach (Publication publication in publications)
+                                {
+                                    <option value="@publication.Name">@publication.Name</option>
+                                }
+                            }
+                        </select>
+                        @*<input type="text" class="form-control" id="BookPublication" name="publication">*@
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-12">
+                        <label for="BookDescription">Description</label>
+                        <textarea class="form-control" id="BookDescription" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-4">
+                        <label for="BookPrice">Price</label>
+                        <input type="text" class="form-control" id="BookPrice" name="price">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="BookQunt">Quantity</label>
+                        <input type="number" class="form-control" id="BookQunt" name="qunt">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <input class="btn btn-success text-capitalize w-100" type="submit" value="insert" name="btnSubmit" />
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+

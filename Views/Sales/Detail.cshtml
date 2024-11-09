@@ -1,0 +1,106 @@
+﻿@using BoiMela.Models
+@using BoiMela.DataAccess
+@{
+    ViewBag.Title = "Detail";
+    int orderId = ViewBag.OrderId;
+}
+
+@{ 
+    List<SoldBook> soldBooks = SalesDataAccess.GetSalesBookList(orderId);
+    var orderDetalis = SalesDataAccess.GetSaleDetails(orderId);
+}
+@model BoiMela.Models.SalesDetalis
+<div class="row">
+    <div class="wraper order-detail">
+        <h3>Order Details</h3>
+        <p>View order details</p>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Customer info</h6>
+                        <article>
+                            <span>@Model.CustName</span>
+                            <br />
+                            <span>@Model.Phone</span>
+                            <br />
+                            <span>@Model.Email</span>
+                            <br />
+                            <address>@Model.Address</address>
+                        </article>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Company info</h6>
+                        <article>
+                            <span>@Model.CustName</span>
+                            <br />
+                            <span>@Model.Phone</span>
+                            <br />
+                            <span>@Model.Email</span>
+                            <br />
+                            <address>@Model.Address</address>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Invoice info</h6>
+                        <p class="d-flex align-items-center justify-content-between"><span>Reference</span><span><span>ODRSL</span>@Model.OrderId</span></p>
+                        <p class="d-flex align-items-center justify-content-between"><span>Payment Status</span><span>Unpaid</span></p>
+                        <p class="d-flex align-items-center justify-content-between"><span>Status</span><span class="text-capitalize">@Model.Status</span></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table style="width: 100%">
+                            <tr>
+                                <th>Book Name</th>
+                                <th>Oty</th>
+                                <th>Price(Unit)</th>
+                                <th>Subtotal</th>
+                            </tr>
+                            @{
+                                decimal totalPrice = 0;
+                                foreach (var soldbook in soldBooks)
+                                {
+                                    decimal price = soldbook.Price * soldbook.Quantity;
+                                    totalPrice += price;
+
+                                    <tr>
+                                        <td>@soldbook.Name</td>
+                                        <td>@soldbook.Quantity</td>
+                                        <td>@soldbook.Price</td>
+                                        <td>@price</td>
+                                    </tr>
+
+                                }
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="fw-bold">Total Price</td>
+                                    <td class="fw-bold">@totalPrice</td>
+                                </tr>
+                            }
+                        </table>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <a class="btn btn-warning" href="@Url.Action("Edit", "Sales", new {id= Model.OrderId})">Edit Sale</a>
+                                <a class="btn btn-success mx-2" href="#">Print</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+

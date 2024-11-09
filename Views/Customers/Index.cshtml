@@ -1,0 +1,65 @@
+﻿@using BoiMela.Models
+@using BoiMela.DataAccess
+@{
+    ViewBag.Title = "Index";
+}
+@{ 
+    List<Customer> customers = CustomerDataAccess.GetCustomerList();
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4>All Customers</h4>
+                    <p>All the listed customers are here!</p>
+                </div>
+                <a class="btn btn-success" href="@Url.Action("Create", "Customers")">Create Customer</a>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="sale-area">
+                        <div class="dt-table-body">
+                            <table id="CustomerTable" class="display tableDataCenter" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (Customer customer in customers)
+                                        {
+                                            <tr>
+                                                <td>@customer.Name</td>
+                                                <td>@customer.Email</td>
+                                                <td>@customer.Phone</td>
+                                                <td>@customer.Address</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-warning" href="@Url.Action("Edit", "Customers", new {id=customer.Id})">Edit</a>
+                                                    <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Customers", new {id=customer.Id})">Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                
+                              
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    DataTableDefiner("CustomerTable");
+</script>
+

@@ -1,0 +1,89 @@
+﻿@using BoiMela.DataAccess
+@using BoiMela.Models
+@using System.Data
+@{
+    ViewBag.Title = "Index";
+}
+@{ 
+    List<Book> books = BookDataAccess.GetBooksData();
+}
+<style>
+
+    #BookTableDt_wrapper {
+        width: 96%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper overflow-hidden">
+            <div class="table-card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h2>All Listed Book</h2>
+                        <p>All listed books is here!</p>
+                    </div>
+                    <div class="insert-btn">
+                        <a class="btn btn-success text-capitalize" href="@Url.Action("Create", "Book")">
+                            Insert Book
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-header d-flex align-items-center justify-content-end">
+                    <div class="dt-search-area">
+                        <div class="dt-search-btn">
+                            <label>Search</label>
+                            <input type="text" id="dt-search-filter" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body overflow-hidden" style="width:100%;">
+                    <div class="dt-table-body overflow-auto">
+                        <table id="BookTableDt" class="display tableDataCenter" style="margin: 0;width:100%; font-size: 14px">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 100px">Title</th>
+                                    <th style="min-width: 100px">Writter</th>
+                                    <th style="min-width: 120px">Genre</th>
+                                    <th style="min-width: 40px">Price(Tk)</th>
+                                    <th style="min-width: 70px">Quantity</th>
+                                    <th style="min-width: 70px">Stock</th>
+                                    <th style="min-width: 120px">Upload Date</th>
+                                    <th style="min-width: 80px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (Book book in books)
+                                    {
+                                        <tr>
+                                            <td>@book.Title</td>
+                                            <td>@book.Writer</td>
+                                            <td>@book.Genre</td>
+                                            <td>@book.Price</td>
+                                            <td>@book.Quantity</td>
+                                            <td>@book.Stock</td>
+                                            <td>@book.UploadDate</td>
+                                            <td>
+                                                <ul class="list-unstyled d-flex align-items-center justify-content-center mb-0">
+                                                    <li class="action-btn"><a href="@Url.Action("Edit", "Book", new {id = book.Id})"><i class="bi bi-pencil-square"></i></a>
+                                                    <li>
+                                                    <li class="action-btn"><a href="@Url.Action("Delete", "Book",  new {id = book.Id})"><i class="bi bi-trash"></i></a></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    DataTableDefiner("BookTableDt")
+</script>

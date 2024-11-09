@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <h4 class="m-0">Add Customer</h4>
+            <p>Create a new book</p>
+            @using (Html.BeginForm("Create", "Customers", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="fName">First Name</label>
+                        <input type="text" class="form-control" id="fName" name="fName">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lName">Last Name</label>
+                        <input type="text" class="form-control" id="lName" name="lName">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-4">
+                        <label for="phone">Phone</label>
+                        <input type="tel" class="form-control" id="phone" name="phone">
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" name="address">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <input class="btn btn-success text-capitalize w-100" type="submit" value="Create A Customer" name="btnSubmit" />
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-dark text-capitalize w-100" href="@Url.Action("Index", "Customers")">Cancel</a>
+                    </div>
+
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <h4 class="m-0">Add Genre</h4>
+            <p>Create a new Genre</p>
+            @using (Html.BeginForm("Create", "Genre", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" id="Name" name="name" placeholder="Enter a genre name...">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="btn btn-success text-capitalize w-100" type="submit" value="Create A Genre" name="btnSubmit" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <a class="btn btn-dark text-capitalize w-100" href="@Url.Action("Index", "Genre")">Cancel</a>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+

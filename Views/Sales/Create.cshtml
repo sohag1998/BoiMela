@@ -1,0 +1,202 @@
+﻿@using BoiMela.Models;
+@using BoiMela.DataAccess;
+@{
+    ViewBag.Title = "Create";
+    string message = ViewBag.Message;
+}
+@{
+    List<Book> books = BookDataAccess.GetBooksData();
+    List<Customer> customers = CustomerDataAccess.GetCustomerList();
+
+}
+
+<style>
+    #checkbox-container,
+    #radio-container {
+        height: 200px;
+        overflow-y: auto;
+    }
+    .selectedBooklist{
+        height: 241px;
+        overflow-y: auto;
+    }
+    .selectedBooklist table tr{
+        border-bottom: 1px solid rgba(0,0,0,.25);
+    }
+    .selectedBooklist table tr th,
+    .selectedBooklist table tr, td{
+        padding: 5px 0;
+    }
+    #checkbox-container input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+    }
+    .selectedBooklist input{
+        width: 50px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper card">
+            <h4>Create New Sale</h4>
+            <p>Create a new sale with your customer</p>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <div class="card p-2">
+                        <label for="search-input" class="form-label">Search Books</label>
+                        <input type="text" id="search-input" class="form-control mb-2" placeholder="Enter book name">
+                        <div id="checkbox-container" class="form-check p-0">
+                            @{
+                                foreach (var book in books)
+                                {
+                                    if (book.Stock >= 1)
+                                    {
+                                        <div class="form-check p-0">
+                                            <button class="btn btn-sm btn-success" onclick="return addBookToCart(@book.Id, '@book.Title', @book.Price)">Add Book</button>
+                                            @*<input class="form-check-input" type="checkbox" name="books" value="@book.Id" id="@book.Id">*@
+                                            <label class="form-check-label" for="@book.Id">@book.Title<span>(@book.Stock)</span></label>
+                                        </div>
+                                        <hr style=" margin:5px 0;" />
+                                    }
+
+
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+
+                    @using (Html.BeginForm("Create", "Sales", FormMethod.Post))
+                    {
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <div class="card p-2">
+                                    <p>Books</p>
+                                    <div class="selectedBooklist">
+                                        <table style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Book Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class="card p-2">
+                                    <label for="search-customer" class="form-label">Search Customer</label>
+                                    <input type="text" id="search-customer" class="form-control mb-2" placeholder="Search customer.....">
+                                    <div id="radio-container" class="form-check">
+                                        @{
+                                            foreach (Customer customer in customers)
+                                            {
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="customer" value="@customer.Id" id='cst-@customer.Id'>
+                                                    <label class="form-check-label" for='cust-@customer.Id'>@customer.Name</label>
+                                                </div>
+
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <input class="btn btn-success" type="submit" value="Insert Sale" name="btnSubmit" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var message = "@message";
+    if (message != "") {
+        alert(message)
+    }
+    var CartBookList = [];
+    $(document).ready(function () {
+        $('#search-input').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#checkbox-container .form-check').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        $('#search-customer').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#radio-container .form-check').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        
+    });
+    function updateBookList() {
+        $(".selectedBooklist table tbody").html('');
+        $.each(CartBookList, function (key, book) {
+            $(".selectedBooklist table tbody").append(
+                `
+                 <tr>
+                     <td><label>${book.title}</label></td>
+                     <td>
+                        
+                        <input type="number" value="${book.quantity}" id="book_${book.id}" name="book_${book.id}" onchange="return priceUpdater(${book.id}, ${book.price})" />
+                     </td>
+                     <td><span id="price_${book.id}">${book.price}</span></td>
+                     <td><button onclick="return removeBook(${book.id})" class="btn btn-sm btn-danger">Remove</button></td>
+                 </tr>
+    
+               `
+            )
+        });
+    }
+    function removeBook(bookId) {
+        var existBook = CartBookList.find(book => book.id === bookId);
+        if (existBook) {
+            var bookIndex = CartBookList.findIndex(book => book.id === bookId);
+            CartBookList.splice(bookIndex, 1);
+            return updateBookList();
+
+        }
+    }
+    function addBookToCart(bookId, Title, Price) {
+        var existBook = CartBookList.find(book => book.id === bookId);
+        
+        if (!existBook) {
+            CartBookList.push({
+                id: bookId,
+                title: Title,
+                price: Price,
+                quantity: 1
+            });
+
+            return updateBookList();
+        }
+        else {
+            alert("Already Added To The List!")
+        }
+    }
+
+</script>
+

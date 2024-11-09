@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+@model BoiMela.Models.Book
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <h4 class="m-0">Update Book</h4>
+            <p>Update the book</p>
+            @using (Html.BeginForm("Edit", "Book", FormMethod.Post))
+            {
+                <div class="row">
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                    <div class="form-group col-md-3">
+                        <label for="BookTitle">Book Name</label>
+                        <input type="text" class="form-control" id="BookTitle" name="title" value="@Model.Title">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookGenre">Genre</label>
+                        <input type="text" class="form-control" id="BookGenre" name="genre" value="@Model.Genre">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookWriter">Writer</label>
+                        <input type="text" class="form-control" id="BookWriter" name="writer" value="@Model.Writer">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="BookPublication">Publication</label>
+                        <input type="text" class="form-control" id="BookPublication" name="publication" value="@Model.Publication">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-12">
+                        <label for="BookDescription">Description</label>
+                        <textarea class="form-control" id="BookDescription" name="description">@Model.Description</textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-4">
+                        <label for="BookPrice">Price(Tk)</label>
+                        <input type="text" class="form-control" id="BookPrice" name="price" value="@Model.Price">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="BookQunt">Quantity</label>
+                        <input type="number" class="form-control" id="BookQunt" name="qunt" value="@Model.Quantity">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <input class="btn btn-success text-capitalize w-100" type="submit" value="edit" name="btnSubmit" />
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,126 @@
+﻿@using BoiMela.Models
+@using BoiMela.DataAccess
+@{
+    ViewBag.Title = "Edit";
+    int orderId = ViewBag.OrderId;
+}
+
+@{
+    List<SoldBook> soldBooks = SalesDataAccess.GetSalesBookList(orderId);
+}
+@model BoiMela.Models.SalesDetalis
+<div class="row">
+    <div class="wraper order-detail">
+        <h3>Edit Sale</h3>
+        <p>Edit sale details</p>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Customer info</h6>
+                        <article>
+                            <span>@Model.CustName</span>
+                            <br />
+                            <span>@Model.Phone</span>
+                            <br />
+                            <span>@Model.Email</span>
+                            <br />
+                            <address>@Model.Address</address>
+                        </article>
+
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Company info</h6>
+                        <article>
+                            <span>@Model.CustName</span>
+                            <br />
+                            <span>@Model.Phone</span>
+                            <br />
+                            <span>@Model.Email</span>
+                            <br />
+                            <address>@Model.Address</address>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Invoice info</h6>
+                        <p class="d-flex align-items-center justify-content-between"><span>Reference</span><span><span>ODRSL</span>@Model.OrderId</span></p>
+                        <p class="d-flex align-items-center justify-content-between"><span>Payment Status</span><span>Unpaid</span></p>
+                        <p class="d-flex align-items-center justify-content-between"><span>Status</span><span class="text-capitalize">@Model.Status</span></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @using (Html.BeginForm("Edit", "Sales", FormMethod.Post))
+                        {
+                            <input type="hidden" value="@Model.OrderId" name="orderId" />
+                            <table style="width: 100%">
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Oty</th>
+                                    <th>Price(Unit)</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                                @{
+                                    decimal totatPrice = 0;
+                                    foreach (var soldbook in soldBooks)
+                                    {
+                                        decimal price = soldbook.Price * soldbook.Quantity;
+                                        totatPrice += price;
+                                        <tr>
+                                            <td>@soldbook.Name</td>
+                                            <td><input type="number" id='book_@soldbook.BookId' name='book_@soldbook.BookId' value="@soldbook.Quantity" onchange="return priceUpdater(@soldbook.BookId, @soldbook.Price, 'totalPrice')" /></td>
+                                            <td>@soldbook.Price</td>
+                                            <td><span class="subTotal" id="price_@soldbook.BookId">@price</span></td>
+                                        </tr>
+
+                                    }
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total Price</td>
+                                        <td id="totalPrice">@totatPrice</td>
+                                    </tr>
+                                }
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Payment Status</label>
+                                    <select name="PaymentStatus" id="PaymentStatus">
+                                        <option value="paid">Paid</option>
+                                        <option value="unpaid">Unpaid</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Status</label>
+                                    <select name="OrderStatus" id="OrderStatus">
+                                        <option value="pending" @(Model.Status == "pending" ? "selected" : "")>Pending</option>
+                                        <option value="complete" @(Model.Status == "complete" ? "selected" : "")>Complete</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <input class="btn btn-warning" type="submit" value="Update" name="updBtn" />
+                                  
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+

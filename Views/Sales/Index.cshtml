@@ -1,0 +1,63 @@
+﻿@using BoiMela.DataAccess
+@using System.Data
+@{
+    ViewBag.Title = "All Sales";
+}
+
+@{ 
+    DataTable Sales = SalesDataAccess.GetSaleList();
+}
+<style>
+
+
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="wraper">
+            <h4>All Sale</h4>
+            <p>All the listed sales are here!</p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="sale-area">
+                        <div class="dt-table-body">
+                            <table id="SalesTable" class="display tableDataCenter" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 180px">Customer Name</th>
+                                        <th style="min-width: 130px">Book Quantity</th>
+                                        <th style="min-width: 130px">Status</th>
+                                        <th style="min-width: 50px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (DataRow sale in Sales.Rows)
+                                        {
+                                            <tr>
+                                                <td>@sale["name"]</td>
+                                                <td>@sale["total_book_quantity"]</td>
+                                                <td><span class="btn btn-sm btn-info text-uppercase">@sale["status"]</span> </td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-success" href="@Url.Action("Detail", "Sales", new { id = sale["id"] })">Details</a>
+                                                    <a class="btn btn-sm btn-warning" href="@Url.Action("Edit", "Sales", new { id = sale["id"] })">Edit</a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    DataTableDefiner("SalesTable")
+</script>
