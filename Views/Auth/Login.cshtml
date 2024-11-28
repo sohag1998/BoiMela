@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+@model BoiMela.Dtos.LoginDtos
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory || Login</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .login-hero {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-area {
+            width: 500px;
+            background: #0b182d;
+            padding: 30px 40px;
+            padding-bottom: 50px;
+            color: #fff;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            box-shadow: 7px 6px 14px 2px #1111116e;
+        }
+
+       .login-area h2 {
+           text-align: center;
+       }
+
+        .input-login {
+            margin: 10px 0;
+        }
+
+        .input-login label {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .input-login input {
+            width: 100%;
+            height: 45px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-top: 10px;
+            outline: none;
+            background: #edededf5;
+            color: #111;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .logMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-hero">
+        <div class="login-area">
+            <h2>Login</h2>
+            <span class="logMessage"></span>
+            @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+            {
+                <div class="input-login">
+                    @Html.TextBoxFor(model => model.Username, new { placeholder = "Enter your username " })
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "userNameError error" })
+                </div>
+                <div class="input-login">
+                    @Html.TextBoxFor(model => model.Password, new { type = "password", placeholder = "Enter your password " })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "passError error" })
+                </div>
+                <div class="btn-login">
+                    <input class="btn btn-primary login-btn" type="submit" value="Login" onclick="return loginFormValidation()">
+
+                </div>
+            }
+        </div>
+    </div>
+
+    <script>
+        const message = "@ViewBag.Message";
+        const Logstatus = "@ViewBag.status";
+        const redirectUrl = "@Url.Action("Index", "Dashboard")";
+
+        const logMessage = document.querySelector(".logMessage")
+        const loginBtn = document.querySelector(".login-btn")
+
+         if (message != "") {
+             if (Logstatus == "True") {
+                 loginBtn.value = "Loging...."
+                 setTimeout(function () {
+                     window.location.href = redirectUrl;
+                 }, 500)
+             }
+             else {
+                 logMessage.textContent = message;
+             }
+
+         }
+        function loginFormValidation() {
+            const userName = document.getElementById("Username");
+            const password = document.getElementById("Password");
+            const userNameError = document.querySelector(".userNameError")
+            const passError = document.querySelector(".passError")
+            if (userName.value === "" || password.value === "") {
+                if (userName.value === "") {
+                    userNameError.textContent = "Username is required"
+                }
+                if (password.value === "") {
+                    passError.textContent = "Password is required"
+                }
+                return false
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

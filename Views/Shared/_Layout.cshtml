@@ -6,6 +6,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+        var session = "@Session["User"]";
+        var redirectUrl = "@Url.Action("Login", "Auth")"
+        if (session == "")
+        {
+            window.location.href = redirectUrl;
+        }
+    </script >
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - BoiGhor</title>
@@ -233,8 +241,13 @@
                         </div>
 
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <div class="header-icon"><h4 class="text-start px-2">Dashboard</h4></div>
+                    </div>
+                    <div class="col-md-2">
+                        <div >
+                            <a class="d-block text-capitalize text-light pointer-event text-end text-decoration-none" href="@Url.Action("Logout", "Auth")">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>

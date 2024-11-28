@@ -120,6 +120,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -131,7 +132,10 @@
     <Compile Include="DataAccess\SummaryStatDataAccess.cs" />
     <Compile Include="DataAccess\WriterDataAccess.cs" />
     <Compile Include="Dtos\CustomerEditDtos.cs" />
+    <Compile Include="Dtos\LoginDtos.cs" />
+    <Compile Include="Dtos\ResigtrationDtos.cs" />
     <Compile Include="Dtos\SummaryStatDtos.cs" />
+    <Compile Include="Models\Auth.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Controllers\SalesController.cs" />
@@ -218,6 +222,8 @@
     <Content Include="Views\Publication\Create.cshtml" />
     <Content Include="Views\Publication\Edit.cshtml" />
     <Content Include="Views\Publication\Index.cshtml" />
+    <Content Include="Views\Auth\Login.cshtml" />
+    <Content Include="Views\Auth\Registration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
