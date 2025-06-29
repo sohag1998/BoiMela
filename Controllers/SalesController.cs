@@ -1,4 +1,6 @@
-﻿using BoiMela.DataAccess;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using BoiMela.DataAccess;
 using BoiMela.Models;
 using Microsoft.SqlServer.Server;
 using System;
@@ -10,6 +12,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
+using BoiMela.Controllers;
+using System.Xml.Linq;
+using System.Globalization;
 
 namespace BoiMela.Controllers
 {
@@ -28,9 +34,9 @@ namespace BoiMela.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection formCollection, string btnSubmit)
         {
-            if(formCollection.Count > 0)
+            if (formCollection.Count > 0)
             {
-                if(btnSubmit == "Insert Sale")
+                if (btnSubmit == "Insert Sale")
                 {
                     Dictionary<int, int> bookQuantities = new Dictionary<int, int>();
                     int cutomerId = Convert.ToInt32(formCollection["customer"]);
@@ -43,7 +49,7 @@ namespace BoiMela.Controllers
                             int quantity = Convert.ToInt32(formCollection[key]);
                             Book book = BookDataAccess.GetBookById(bookId);
 
-                            if(book.Stock < quantity)
+                            if (book.Stock < quantity)
                             {
                                 ViewBag.Message = "Insuficiennt Book";
                                 return View();
@@ -58,10 +64,10 @@ namespace BoiMela.Controllers
                     return RedirectToAction("Index", "Sales");
 
                 }
-                
+
             }
             return View();
-            
+
         }
         [HttpGet]
         [Route("Sales/GetSoldBookList/{id}")]
@@ -93,7 +99,7 @@ namespace BoiMela.Controllers
         [HttpPost]
         public ActionResult Edit(FormCollection formCollection, string updBtn)
         {
-            if(updBtn == "Update")
+            if (updBtn == "Update")
             {
                 if (formCollection != null)
                 {
@@ -116,7 +122,7 @@ namespace BoiMela.Controllers
 
                     int result = SalesDataAccess.UpdateOrder(orderId, orderStatus, bookQuantites);
 
-                    if (result==1)
+                    if (result == 1)
                     {
                         return RedirectToAction("Detail", "Sales", new { id = orderId });
                     }
@@ -127,7 +133,55 @@ namespace BoiMela.Controllers
             return View();
         }
 
+        public ActionResult GeneratePDF(int id)
+        {
+            int OrderId = id;  // No need for Convert.ToInt32 if id is already an int
+            List<SoldBook> soldBooks = SalesDataAccess.GetSalesBookList(OrderId);
+
+            if (soldBooks == null || !soldBooks.Any())
+            {
+                return new HttpStatusCodeResult(404, "No sales data found for the provided Order ID.");
+            }
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Document document = new Document();
+                PdfWriter writer = PdfWriter.GetInstance(document, stream);
+                writer.CloseStream = false; // Ensure the writer does not close the stream
+                document.Open();
+
+                document.Add(new Paragraph("Order Details"));
+                document.Add(new Paragraph(" ")); // Add spacing
+
+                PdfPTable table = new PdfPTable(4);
+                table.SetWidths(new float[] {3f, 1f, 1f, 1f}); // Explicitly set column widths
+                table.AddCell("Product Name");
+                table.AddCell("Quantity");
+                table.AddCell("Price(TK)");
+                table.AddCell("Sub Total (TK)");
+                foreach (var order in soldBooks)
+                {
+                    table.AddCell(order.Name);
+                    table.AddCell(order.Quantity.ToString());
+                    table.AddCell(order.Price.ToString());
+                    table.AddCell(Convert.ToString(order.Price * order.Quantity));
+                }
+
+                document.Add(table);
+                document.Close(); // Ensure the document is properly closed
+
+                // Reset the stream position
+                stream.Position = 0;
+
+                // Return the stream as a File result
+                return File(stream.ToArray(), "application/pdf", "OrderDetails.pdf");
+            }
+        }
+
+
+
     }
 
 
 }
+

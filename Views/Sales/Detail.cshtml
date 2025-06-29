@@ -33,19 +33,18 @@
                     <div class="col-md-4">
                         <h6>Company info</h6>
                         <article>
-                            <span>@Model.CustName</span>
+                            <span>BoiGhor</span>
                             <br />
-                            <span>@Model.Phone</span>
+                            <span>01623423456</span>
                             <br />
-                            <span>@Model.Email</span>
+                            <span>boighor@gmail.com</span>
                             <br />
-                            <address>@Model.Address</address>
+                            <address>Pabna Sadar, Pabna</address>
                         </article>
                     </div>
                     <div class="col-md-4">
                         <h6>Invoice info</h6>
                         <p class="d-flex align-items-center justify-content-between"><span>Reference</span><span><span>ODRSL</span>@Model.OrderId</span></p>
-                        <p class="d-flex align-items-center justify-content-between"><span>Payment Status</span><span>Unpaid</span></p>
                         <p class="d-flex align-items-center justify-content-between"><span>Status</span><span class="text-capitalize">@Model.Status</span></p>
                     </div>
                 </div>
@@ -87,7 +86,7 @@
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <a class="btn btn-warning" href="@Url.Action("Edit", "Sales", new {id= Model.OrderId})">Edit Sale</a>
-                                <a class="btn btn-success mx-2" href="#">Print</a>
+                                <a class="btn btn-success mx-2" href="@Url.Action("GeneratePDF", "Sales", new {id= Model.OrderId})">Print</a>
                             </div>
                         </div>
 
